@@ -74,9 +74,9 @@ class _Client2CheckState extends State<Client2Check> {
   String _status = '';
   String _appAuthStatus = '';
   final FlutterAppAuth _appAuth = FlutterAppAuth();
-  final String _clientId = 'SocailLogin';
-  final String _redirectUrl = 'https://34.204.16.224:8458/auth/realms/smartcity/broker/gitlab/endpoint';
-  final String _discoveryUrl = 'https://34.204.16.224:8458/auth/realms/smartcity/.well-known/openid-configuration';
+  final String _clientId = 'CardByteDashboard';
+  final String _redirectUrl = 'https://34.204.16.224:8458/auth/admin/cardbyte/console';
+  final String _discoveryUrl = 'https://34.204.16.224:8458/auth/realms/cardbyte/.well-known/openid-configuration';
   final List<String> _scopes = <String>[
     'openid',
     'profile',
@@ -86,12 +86,12 @@ class _Client2CheckState extends State<Client2Check> {
   ];
 
   authenticate() async {
-    var uri = Uri.parse('http://34.204.16.224:8458/auth/realms/smartcity');
-    var clientId = 'SmartLightDashboard';
+    var uri = Uri.parse('https://34.204.16.224:8458/auth/realms/cardbyte');
+    var clientId = 'CardByteDashboard';
     var scopes = List<String>.of(
         ['openid', 'profile', 'email', 'offline_access', 'api']);
     var port = 8458;
-    var redirectUri = Uri.parse('https://34.204.16.224:8458/auth/realms/smartcity/broker/gitlab/endpoint');
+    var redirectUri = Uri.parse('https://34.204.16.224:8458/auth/realms/cardbyte/protocol/openid-connect/token');
     var issuer = await Issuer.discover(uri);
     var client = new Client(issuer, clientId);
 
@@ -120,11 +120,11 @@ class _Client2CheckState extends State<Client2Check> {
   @override
   void initState() {
     super.initState();
-    startServer();
+//    startServer();
   }
 
   Future<void> startServer() async {
-    final server = await HttpServer.bind('127.0.0.1', 43823);
+    final server = await HttpServer.bind('34.204.16.224', 8458);
     server.listen((req) async {
       setState(() {
         _status = 'Received request!';
@@ -134,13 +134,21 @@ class _Client2CheckState extends State<Client2Check> {
       req.response.close();
     });
   }
+  // Construct the url
+//  final url = Uri.https('accounts.google.com', '/o/oauth2/v2/auth', {
+//    'response_type': 'code',
+//    'client_id': "CardByteDashboard",
+//    'redirect_uri': 'https://34.204.16.224:8458/auth/realms/smartcity/broker/gitlab/endpoint',
+//    'scope': 'email',
+//  });
 
   void _authenticate() async {
-    final url = 'https://34.204.16.224:8458/auth/realms/smartcity/broker/gitlab/endpoint';
-    final callbackUrlScheme = 'foobar';
+    final url = 'https://34.204.16.224:8458/auth/realms/cardbyte/protocol/openid-connect/token';
+    final callbackUrlScheme = 'https://34.204.16.224:8458/auth/realms/cardbyte/broker/gitlab/endpoint';
 
     try {
       final result = await FlutterWebAuth.authenticate(
+
           url: url, callbackUrlScheme: callbackUrlScheme);
       setState(() {
         _status = 'Got result: $result';
@@ -154,8 +162,8 @@ class _Client2CheckState extends State<Client2Check> {
 
   final AuthorizationServiceConfiguration _serviceConfiguration =
   AuthorizationServiceConfiguration(
-      'http://34.204.16.224:8095/auth/realms/smartcity/protocol/openid-connect/auth',
-      'http://34.204.16.224:8095/auth/realms/smartcity/protocol/openid-connect/token');
+      'https://34.204.16.224:8458/auth/realms/cardbyte/protocol/openid-connect/auth',
+      'https://34.204.16.224:8458/auth/realms/cardbyte/protocol/openid-connect/token');
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -199,7 +207,7 @@ class _Client2CheckState extends State<Client2Check> {
               },
             ),
             RaisedButton(
-              child: Text("Login usein open client id"),
+              child: Text("Login using open client id"),
               onPressed: authenticate,
             ),
             RaisedButton(
