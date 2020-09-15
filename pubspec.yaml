@@ -25,6 +25,12 @@ dependencies:
     sdk: flutter
   flutter_appauth: ^0.9.2+4
   http: ^0.12.2
+  flutter_web_auth: ^0.2.4
+  openid_client: ^0.3.1
+  url_launcher:
+
+
+
 
 
 
